@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رحلة في الفضاء</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#04060f;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.16);--txt:#fff;--soft:#c3cbea;--gold:#ffc857;--pink:#ff6b9d;--cyan:#5ad1ff;--violet:#8e7bff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Cairo',Tahoma,Arial,sans-serif}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.slide{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:center;padding:6vmin 5vw 6vmin 50vw;opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s;background:linear-gradient(to left,rgba(4,6,15,.82) 0%,rgba(4,6,15,.55) 45%,rgba(4,6,15,0) 75%)}
+.slide.on{opacity:1;visibility:visible}
+h1,h2{font-family:'Reem Kufi','Cairo',sans-serif;font-weight:700;line-height:1.15}
+h2{font-size:clamp(28px,5vmin,52px);margin-bottom:3vmin}
+.grad{background:linear-gradient(90deg,var(--gold),var(--pink),var(--violet),var(--cyan));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 6s linear infinite}
+@keyframes shift{to{background-position:300% 0}}
+.rv{opacity:0;transform:translateY(26px);filter:blur(8px)}
+.on .rv{animation:rv .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i,0)*.16s + .25s)}
+@keyframes rv{to{opacity:1;transform:none;filter:none}}
+.hero h1{font-size:clamp(60px,15vmin,150px)}
+.hero p{font-size:clamp(16px,2.8vmin,26px);color:var(--soft);margin-top:1.5vmin}
+.hero .by{margin-top:4vmin;color:var(--gold);letter-spacing:.12em;font-size:clamp(14px,2.2vmin,20px)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:2vmin}
+.st{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2.6vmin 2vmin;backdrop-filter:blur(8px)}
+.st b{display:block;font-family:'Reem Kufi',sans-serif;font-size:clamp(30px,6.4vmin,60px);color:var(--gold);line-height:1}
+.st span{display:block;margin-top:1vmin;color:var(--soft);font-size:clamp(12px,1.9vmin,17px)}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:1.2vmin}
+.legend div{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2vmin 1.6vmin;font-size:clamp(13px,2vmin,18px);cursor:pointer;transition:.3s}
+.legend div:hover,.legend div.sel{background:rgba(255,200,87,.2);border-color:var(--gold)}
+.legend i{width:14px;height:14px;border-radius:50%;flex:none}
+.legend small{display:block;color:var(--soft);font-size:.78em}
+.hint{margin-top:2vmin;color:var(--soft);font-size:clamp(12px,1.9vmin,17px)}
+.tl{position:relative;display:grid;gap:1.3vmin;padding-right:3vmin}
+.tl:before{content:"";position:absolute;top:0;right:0;width:3px;height:0;background:linear-gradient(var(--gold),var(--pink));border-radius:3px}
+.on .tl:before{animation:gy 2s .3s ease-out forwards}
+@keyframes gy{to{height:100%}}
+.ev{display:flex;align-items:center;gap:2vmin;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.2vmin 2vmin}
+.ev b{font-family:'Reem Kufi',sans-serif;color:var(--gold);font-size:clamp(20px,3.8vmin,34px);min-width:4.2ch}
+.ev h3{font-size:clamp(14px,2.3vmin,20px)}
+.ev span{color:var(--soft);font-size:clamp(11px,1.8vmin,16px)}
+.cards{display:grid;gap:2vmin}
+.fc{perspective:900px;height:min(15vmin,120px);cursor:pointer}
+.fc>div{position:relative;width:100%;height:100%;transition:transform .8s;transform-style:preserve-3d}
+.fc.f>div{transform:rotateY(180deg)}
+.fc p{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5vmin 2.5vmin;border:1px solid var(--line);font-size:clamp(13px,2.2vmin,20px)}
+.fc .a{background:linear-gradient(135deg,rgba(142,123,255,.38),rgba(255,107,157,.32));font-family:'Reem Kufi',sans-serif;font-size:clamp(20px,3.6vmin,32px)}
+.fc .b{background:rgba(20,26,60,.85);transform:rotateY(180deg);color:var(--soft)}
+.nav{position:fixed;z-index:5;bottom:calc(2.2vmin + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;align-items:center;gap:12px}
+.dots{display:flex;gap:8px}
+.dots i{width:9px;height:9px;border-radius:9px;background:var(--line);transition:.4s;cursor:pointer}
+.dots i.on{width:30px;background:linear-gradient(90deg,var(--gold),var(--pink))}
+.nav button{background:var(--card);border:1px solid var(--line);color:var(--txt);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;font-family:inherit}
+#ld{position:fixed;inset:0;z-index:9;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Reem Kufi',sans-serif;font-size:26px;color:var(--gold);transition:opacity 1s}
+@media(max-width:760px){.slide{padding:6vmin 6vw 9vmax 6vw;justify-content:flex-end;overflow:auto;background:linear-gradient(to top,rgba(4,6,15,.88) 0%,rgba(4,6,15,.6) 55%,rgba(4,6,15,0) 100%)}.hero h1{font-size:clamp(48px,14vw,90px)}.cards{gap:1.2vmin}.fc{height:70px}.legend{grid-template-columns:1fr 1fr}.ev{padding:.8vmin 1.6vmin}}
+@media(prefers-reduced-motion:reduce){.rv,.on .rv{animation-duration:.01s!important}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas><div id="ld">جاري تجهيز الكون…</div>
+
+<section class="slide hero on">
+  <h1 class="grad rv">الفضاء</h1>
+  <p class="rv" style="--i:1">رحلة من المجموعة الشمسية إلى أطراف الكون</p>
+  <p class="by rv" style="--i:2">NOURA EMAD</p>
+</section>
+
+<section class="slide">
+  <h2 class="rv">الشمس… قلب مجموعتنا</h2>
+  <div class="stats">
+    <div class="st rv" style="--i:1"><b data-n="8">0</b><span>كواكب تدور حولها</span></div>
+    <div class="st rv" style="--i:2"><b data-n="8">0</b><span>دقائق يحتاجها ضوءها ليصل إلينا</span></div>
+    <div class="st rv" style="--i:3"><b data-n="384400">0</b><span>كم بين الأرض والقمر</span></div>
+    <div class="st rv" style="--i:4"><b data-n="200">0</b><span>مليار نجم في مجرتنا</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2 class="rv">المجموعة الشمسية</h2>
+  <div class="legend rv" style="--i:1" id="leg"></div>
+  <p class="hint rv" style="--i:2">اضغطي على أي كوكب لتطيري إليه، واضغطي مرة ثانية للعودة</p>
+</section>
+
+<section class="slide">
+  <h2 class="rv">القمر ومحطات الاستكشاف</h2>
+  <div class="tl">
+    <div class="ev rv" style="--i:1"><b>1957</b><div><h3>سبوتنيك 1</h3><span>أول قمر صناعي</span></div></div>
+    <div class="ev rv" style="--i:2"><b>1961</b><div><h3>يوري غاغارين</h3><span>أول إنسان في الفضاء</span></div></div>
+    <div class="ev rv" style="--i:3"><b>1969</b><div><h3>أبولو 11</h3><span>أول هبوط على القمر</span></div></div>
+    <div class="ev rv" style="--i:4"><b>1990</b><div><h3>تلسكوب هابل</h3><span>صور مذهلة للكون</span></div></div>
+    <div class="ev rv" style="--i:5"><b>2021</b><div><h3>جيمس ويب</h3><span>أقوى تلسكوب فضائي</span></div></div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2 class="rv">زحل وحقائق مذهلة</h2>
+  <div class="cards">
+    <div class="fc rv" style="--i:1"><div><p class="a">حلقات زحل</p><p class="b">مكوّنة من جليد وصخور، وسمكها بضع عشرات من الأمتار فقط</p></div></div>
+    <div class="fc rv" style="--i:2"><div><p class="a">يوم الزهرة</p><p class="b">أطول من سنتها! فهي تدور حول نفسها ببطء شديد</p></div></div>
+    <div class="fc rv" style="--i:3"><div><p class="a">صمت الفضاء</p><p class="b">لا يوجد صوت لأنه لا يوجد هواء لينقله</p></div></div>
+  </div>
+  <p class="hint rv" style="--i:4">اضغطي على أي بطاقة لتنقلب</p>
+</section>
+
+<section class="slide hero">
+  <h1 class="grad rv">شكراً لكم</h1>
+  <p class="rv" style="--i:1">السماء ليست هي الحد</p>
+  <p class="by rv" style="--i:2">NOURA EMAD</p>
+</section>
+
+<div class="nav"><button id="nx" aria-label="التالي">›</button><div class="dots" id="dots"></div><button id="pv" aria-label="السابق">‹</button><button id="ap" aria-label="تشغيل تلقائي">▶</button></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var S=[].slice.call(document.querySelectorAll('.slide')),cur=0,timer=null,over=null;
+var dots=document.getElementById('dots');
+S.forEach(function(_,i){var d=document.createElement('i');d.onclick=function(){go(i)};dots.appendChild(d)});
+function count(sl){[].forEach.call(sl.querySelectorAll('[data-n]'),function(el){var n=+el.dataset.n,t0=performance.now();(function f(t){var k=Math.min(1,(t-t0)/1800),e=1-Math.pow(1-k,3);el.textContent=Math.round(n*e).toLocaleString('en-US');if(k<1)requestAnimationFrame(f)})(t0)})}
+function go(n){n=Math.max(0,Math.min(S.length-1,n));S.forEach(function(s,i){s.classList.toggle('on',i===n)});[].forEach.call(dots.children,function(d,i){d.classList.toggle('on',i===n)});if(n!==cur)over=null,sel();if(n===1)count(S[1]);cur=n}
+go(0);
+document.getElementById('nx').onclick=function(){go(cur+1)};
+document.getElementById('pv').onclick=function(){go(cur-1)};
+document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'||e.key===' '||e.key==='PageDown')go(cur+1);if(e.key==='ArrowRight'||e.key==='PageUp')go(cur-1)});
+var x0=null;document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>70)go(cur+(dx<0?1:-1));x0=null});
+[].forEach.call(document.querySelectorAll('.fc'),function(c){c.onclick=function(){c.classList.toggle('f')}});
+var ap=document.getElementById('ap');
+ap.onclick=function(){if(timer){clearInterval(timer);timer=null;ap.textContent='▶';return}ap.textContent='❚❚';timer=setInterval(function(){go(cur>=S.length-1?0:cur+1)},7000)};
+function sel(){[].forEach.call(document.querySelectorAll('#leg div'),function(d,i){d.classList.toggle('sel',over===i)})}
+
+function ld(){var l=document.getElementById('ld');l.style.opacity=0;setTimeout(function(){l.remove()},1000)}
+if(!window.THREE){ld();return}
+try{
+// ---------- noise & textures ----------
+function hash(x,y,s){var h=Math.sin(x*127.1+y*311.7+s*74.7)*43758.5453;return h-Math.floor(h)}
+function lerp(a,b,t){return a+(b-a)*t}
+function vn(x,y,p,s){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+  var x0=((xi%p)+p)%p,x1=(((xi+1)%p)+p)%p;
+  return lerp(lerp(hash(x0,yi,s),hash(x1,yi,s),u),lerp(hash(x0,yi+1,s),hash(x1,yi+1,s),u),v)}
+function fbm(u,v,base,oct,s){var a=.5,t=0,f=base;for(var o=0;o<oct;o++){t+=a*vn(u*f,v*f*.5,f,s+o);a*=.5;f*=2}return t/.97}
+function mix(a,b,t){t=Math.max(0,Math.min(1,t));return [lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)]}
+function tex(fn,w,h){w=w||512;h=h||256;var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d'),im=x.createImageData(w,h),d=im.data;
+  for(var j=0;j<h;j++)for(var i=0;i<w;i++){var c4=fn(i/w,j/h),k=(j*w+i)*4;d[k]=c4[0];d[k+1]=c4[1];d[k+2]=c4[2];d[k+3]=c4.length>3?c4[3]:255}
+  x.putImageData(im,0,0);return {c:c,x:x}}
+function T(o){return new THREE.CanvasTexture(o.c||o)}
+function craters(o,n,dark){var x=o.x,w=o.c.width,h=o.c.height;for(var i=0;i<n;i++){var cx=Math.random()*w,cy=h*.1+Math.random()*h*.8,r=2+Math.random()*Math.random()*16;
+  var g=x.createRadialGradient(cx,cy,r*.2,cx,cy,r);g.addColorStop(0,'rgba(0,0,0,'+dark+')');g.addColorStop(.85,'rgba(0,0,0,'+dark*.5+')');g.addColorStop(1,'rgba(255,255,255,.10)');
+  x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,6.283);x.fill()}}
+var earthT=T(tex(function(u,v){var h=fbm(u,v,4,5,1),lat=Math.abs(v-.5)*2;
+  if(lat>.9||(h>.52&&lat>.8))return mix([225,235,245],[255,255,255],h);
+  if(h>.52){var t=(h-.52)*4;return lat<.3&&h<.6?mix([190,160,100],[120,140,60],t*2):mix([55,115,50],[135,105,70],t)}
+  return mix([8,34,92],[28,92,165],h*1.5)}));
+var cloudT=T(tex(function(u,v){var c=fbm(u,v,5,5,9);return [255,255,255,Math.max(0,Math.min(1,(c-.5)*3.2))*230]}));
+var moonO=tex(function(u,v){var n=fbm(u,v,6,4,3);return mix([95,95,98],[175,175,178],n)});craters(moonO,90,.5);var moonT=T(moonO);
+var merO=tex(function(u,v){var n=fbm(u,v,7,4,4);return mix([80,76,72],[165,155,145],n)});craters(merO,120,.45);var merT=T(merO);
+var venT=T(tex(function(u,v){var n=fbm(u,v*1.0,3,5,5)+Math.sin(v*14+fbm(u,v,3,3,6)*5)*.1;return mix([200,150,80],[250,225,170],n)}));
+var marsT=T(tex(function(u,v){var n=fbm(u,v,5,5,7),lat=Math.abs(v-.5)*2;if(lat>.93)return [245,245,250];return mix([120,50,28],[215,130,80],n)}));
+var jupO=tex(function(u,v){var tb=fbm(u,v,4,4,8),b=Math.sin(v*38+tb*7)*.5+.5,c=mix([150,100,70],[235,210,175],b*.8+tb*.3);
+  var dx=(u-.3)/.075,dy=(v-.6)/.05;if(dx*dx+dy*dy<1)c=mix(c,[190,70,45],1-(dx*dx+dy*dy));return c});var jupT=T(jupO);
+var satT=T(tex(function(u,v){var tb=fbm(u,v,3,3,10),b=Math.sin(v*26+tb*4)*.5+.5;return mix([185,160,115],[240,222,170],b*.7+tb*.3)}));
+var uraT=T(tex(function(u,v){var b=Math.sin(v*10)*.05+fbm(u,v,3,3,11)*.15;return mix([120,200,205],[170,235,235],b+.4)}));
+var nepT=T(tex(function(u,v){var n=fbm(u,v,4,4,12),b=Math.sin(v*18+n*5)*.5+.5;return mix([30,60,170],[90,130,235],b*.6+n*.3)}));
+var sunT=T(tex(function(u,v){var n=fbm(u,v,6,5,13),m=fbm(u,v,14,3,14);return mix([200,70,10],[255,235,120],n*1.2+m*.3)}));
+var nebT=T(tex(function(u,v){var n=fbm(u,v,3,5,15),m=fbm(u,v,2,4,16),k=Math.pow(n,2.2)*1.4;
+  var c=mix([4,6,16],[70,30,120],k);c=mix(c,[20,70,140],Math.pow(m,3)*1.2);return c}));
+// ring texture
+var rc=document.createElement('canvas');rc.width=512;rc.height=2;var rx=rc.getContext('2d'),rg=rx.createLinearGradient(0,0,512,0);
+for(var i=0;i<=40;i++){var a=Math.random()*.7+.2;if(i>16&&i<19)a=.04;rg.addColorStop(i/40,'rgba('+(200+Math.random()*40|0)+','+(180+Math.random()*30|0)+',140,'+a+')')}
+rx.fillStyle=rg;rx.fillRect(0,0,512,2);var ringT=new THREE.CanvasTexture(rc);
+
+// ---------- scene ----------
+var cv=document.getElementById('gl'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,2000);
+sc.add(new THREE.AmbientLight(0x33406a,.9));
+var sunL=new THREE.PointLight(0xfff2dd,2.2,0,0);sc.add(sunL);
+var bg=new THREE.Mesh(new THREE.SphereGeometry(900,40,20),new THREE.MeshBasicMaterial({map:nebT,side:THREE.BackSide}));sc.add(bg);
+var sp=new Float32Array(3*3000);for(var i=0;i<3000;i++){var th=Math.random()*6.283,ph=Math.acos(2*Math.random()-1),r=700;sp[i*3]=r*Math.sin(ph)*Math.cos(th);sp[i*3+1]=r*Math.cos(ph);sp[i*3+2]=r*Math.sin(ph)*Math.sin(th)}
+var sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+var stars=new THREE.Points(sg,new THREE.PointsMaterial({size:1.7,sizeAttenuation:false,color:0xffffff}));sc.add(stars);
+// sun
+var sunR=5,sun=new THREE.Mesh(new THREE.SphereGeometry(sunR,48,32),new THREE.MeshBasicMaterial({map:sunT}));sc.add(sun);
+var gc=document.createElement('canvas');gc.width=gc.height=128;var gx=gc.getContext('2d'),gr=gx.createRadialGradient(64,64,0,64,64,64);
+gr.addColorStop(0,'rgba(255,230,150,1)');gr.addColorStop(.25,'rgba(255,170,60,.55)');gr.addColorStop(1,'rgba(255,100,20,0)');gx.fillStyle=gr;gx.fillRect(0,0,128,128);
+var glow=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(gc),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));glow.scale.set(sunR*5,sunR*5,1);sc.add(glow);
+// planets
+var D=[
+ {n:'عطارد',s:'الأقرب للشمس',c:'#b5b5b5',r:.6,d:9,w:.55,t:merT,tilt:.03},
+ {n:'الزهرة',s:'الأسخن',c:'#ffcf8a',r:1.1,d:13,w:.4,t:venT,tilt:3.1},
+ {n:'الأرض',s:'كوكبنا',c:'#5ad1ff',r:1.2,d:18,w:.3,t:earthT,tilt:.41},
+ {n:'المريخ',s:'الكوكب الأحمر',c:'#ff7a59',r:.85,d:23,w:.24,t:marsT,tilt:.44},
+ {n:'المشتري',s:'الأكبر',c:'#e3b07a',r:3,d:33,w:.13,t:jupT,tilt:.05},
+ {n:'زحل',s:'صاحب الحلقات',c:'#ffd98a',r:2.5,d:44,w:.09,t:satT,tilt:.47},
+ {n:'أورانوس',s:'يدور على جنبه',c:'#8ee6e0',r:1.8,d:54,w:.065,t:uraT,tilt:1.7},
+ {n:'نبتون',s:'الأبعد',c:'#6f86ff',r:1.7,d:63,w:.05,t:nepT,tilt:.5}];
+D.forEach(function(p,i){
+  p.a=i*1.1+.5;p.g=new THREE.Group();p.m=new THREE.Mesh(new THREE.SphereGeometry(p.r,56,36),new THREE.MeshPhongMaterial({map:p.t,shininess:i==2?18:4}));
+  p.tg=new THREE.Group();p.tg.rotation.z=p.tilt;p.tg.add(p.m);p.g.add(p.tg);sc.add(p.g);
+  var pts=[];for(var k=0;k<=128;k++){var q=k/128*6.283;pts.push(new THREE.Vector3(Math.cos(q)*p.d,0,Math.sin(q)*p.d))}
+  sc.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.13})));
+});
+var E=D[2],clouds=new THREE.Mesh(new THREE.SphereGeometry(E.r*1.015,56,36),new THREE.MeshPhongMaterial({map:cloudT,transparent:true,depthWrite:false}));E.tg.add(clouds);
+var atm=new THREE.Mesh(new THREE.SphereGeometry(E.r*1.09,48,32),new THREE.MeshBasicMaterial({color:0x5ab4ff,transparent:true,opacity:.16,side:THREE.BackSide,blending:THREE.AdditiveBlending,depthWrite:false}));E.g.add(atm);
+var Sa=D[5],rg2=new THREE.RingGeometry(Sa.r*1.35,Sa.r*2.4,128),pa=rg2.attributes.position,uv=rg2.attributes.uv,v3=new THREE.Vector3();
+for(var i=0;i<pa.count;i++){v3.fromBufferAttribute(pa,i);uv.setXY(i,(v3.length()-Sa.r*1.35)/(Sa.r*1.05),.5)}
+var ring=new THREE.Mesh(rg2,new THREE.MeshBasicMaterial({map:ringT,side:THREE.DoubleSide,transparent:true,depthWrite:false}));ring.rotation.x=-Math.PI/2;Sa.tg.add(ring);
+var moon={r:.34,a:0,g:new THREE.Mesh(new THREE.SphereGeometry(.34,40,28),new THREE.MeshPhongMaterial({map:moonT,shininess:2}))};sc.add(moon.g);
+// legend
+var leg=document.getElementById('leg');
+D.forEach(function(p,i){var l=document.createElement('div');l.innerHTML='<i style="background:'+p.c+'"></i><span>'+p.n+'<small>'+p.s+'</small></span>';
+  l.onclick=function(){over=(over===i?null:i);sel()};leg.appendChild(l)});
+// ---------- camera focus ----------
+var FO=[{t:E,d:5.2},{t:'sun',d:22},{t:'all'},{t:'moon',d:2.2},{t:Sa,d:12},{t:E,d:11}];
+var desired=new THREE.Vector3(),look=new THREE.Vector3(),want=new THREE.Vector3(),cp=new THREE.Vector3(0,3,30),cl=new THREE.Vector3(),tmp=new THREE.Vector3();
+function focus(f,out,lk){
+  if(f.t==='all'){out.set(0,58,82);lk.set(0,0,0);return}
+  if(f.t==='sun'){out.set(0,5,f.d);lk.set(0,0,0);return}
+  var pos=f.t==='moon'?moon.g.position:f.t.g.position;lk.copy(pos);
+  tmp.copy(pos).normalize().multiplyScalar(-1);out.copy(pos).addScaledVector(tmp,f.d).add(new THREE.Vector3(0,f.d*.22,0));
+}
+function size(){var W=innerWidth,H=innerHeight;R.setSize(W,H,false);cam.aspect=W/H;
+  if(W/H>1.05)cam.setViewOffset(W,H,W*.2,0,W,H);else cam.setViewOffset(W,H,0,H*.2,W,H);cam.updateProjectionMatrix()}
+size();addEventListener('resize',size);
+var last=performance.now();
+function frame(t){
+  var dt=Math.min(.05,(t-last)/1000);last=t;
+  D.forEach(function(p){p.a+=p.w*dt;p.g.position.set(Math.cos(p.a)*p.d,0,Math.sin(p.a)*p.d);p.m.rotation.y+=dt*(p===D[1]?-.05:.25)});
+  clouds.rotation.y+=dt*.33;sun.rotation.y+=dt*.04;glow.scale.setScalar(sunR*(5+Math.sin(t/700)*.18));
+  moon.a+=dt*1.1;moon.g.position.set(E.g.position.x+Math.cos(moon.a)*2.6,.25,E.g.position.z+Math.sin(moon.a)*2.6);
+  bg.rotation.y+=dt*.002;stars.rotation.y+=dt*.004;
+  var f=FO[cur];if(cur===2&&over!==null){f={t:D[over],d:D[over].r*4+2}}
+  focus(f,want,cl);var k=1-Math.exp(-dt*2.2);cp.lerp(want,k);look.lerp(cl,k);
+  cam.position.copy(cp);cam.lookAt(look);R.render(sc,cam);requestAnimationFrame(frame)}
+look.set(0,0,0);cp.set(0,6,30);
+requestAnimationFrame(frame);
+ld();
+}catch(e){console.error(e);ld()}
+})();
+</script>
+</body>
+</html>
